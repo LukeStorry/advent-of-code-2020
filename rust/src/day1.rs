@@ -1,7 +1,7 @@
 use crate::utils;
 
 pub fn solve() {
-  let input = utils::get_input(1);
+  let input = utils::get_input_ints(1);
   print!("Day 1 part 1: {}\n", part_1(&input));
   print!("Day 1 part 2: {}\n", part_2(&input));
 }

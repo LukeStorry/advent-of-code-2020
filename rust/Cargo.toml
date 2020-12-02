@@ -7,3 +7,4 @@ repository = "https://github.com/lukestorry/advent-of-code-2020/"
 description = "My Rusty solutions to aoc 2020"
 
 [dependencies]
+regex = "1"

@@ -1,5 +1,6 @@
 use std::env;
 mod day1;
+mod day2;
 mod utils;
 
 fn main() {
@@ -7,7 +8,11 @@ fn main() {
 
   match day.as_str() {
     "1" => day1::solve(),
-    "all" => day1::solve(),
+    "2" => day2::solve(),
+    "all" => {
+      day1::solve();
+      day2::solve()
+    }
     _ => println!("Nothing for this day"),
   }
 }

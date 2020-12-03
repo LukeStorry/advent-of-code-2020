@@ -30,12 +30,10 @@ fn part_1(map: &Vec<String>) -> u32 {
 }
 
 fn part_2(map: &Vec<String>) -> u64 {
-  let slope1 = count_trees_on_route(map, 1, 1);
-  let slope2 = count_trees_on_route(map, 3, 1);
-  let slope3 = count_trees_on_route(map, 5, 1);
-  let slope4 = count_trees_on_route(map, 7, 1);
-  let slope5 = count_trees_on_route(map, 1, 2);
-  u64::from(slope1 * slope2) * u64::from(slope3 * slope4 * slope5)
+  [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)]
+    .iter()
+    .map(|(dx, dy)| u64::from(count_trees_on_route(map, *dx, *dy)))
+    .product()
 }
 
 #[cfg(test)]

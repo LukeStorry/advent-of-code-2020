@@ -1,47 +1,23 @@
-use std::str::FromStr;
+use std::collections::HashMap;
+use regex::Regex;
 
-#[derive(Debug)]
-struct ParseError {
-    message: String
+type Passport<'a> = HashMap<&'a str, &'a str>;
+
+lazy_static! {
+    static ref RE_PASSPORT :Regex =Regex::new(r"(?P<field>[a-z]+):(?P<value>\S+)").unwrap();
 }
 
-#[derive(Default, Debug)]
-struct Passport<'a> {
-    byr: Option<&'a str>,
-    iyr: Option<&'a str>,
-    eyr: Option<&'a str>,
-    hgt: Option<&'a str>,
-    hcl: Option<&'a str>,
-    ecl: Option<&'a str>,
-    pid: Option<&'a str>,
-    cid: Option<&'a str>,
-}
-
-impl FromStr for Passport<'static> {
-    type Err = ParseError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let mut passport = Passport::default(); // initialise with all fields as None
-        let fields: Vec<(&'static str, &'static str)> = s.split_whitespace()
-            .map(|f| f.split(':').take(2).collect::<Vec<&str>>())
-            .map(|split| (split[0], split[1]))
-            .collect();
-        for (key, value) in fields {
-            match key {
-                "byr" => passport.byr = Some(value),
-                "iyr" => passport.iyr = Some(value),
-                "eyr" => passport.eyr = Some(value),
-                "hgt" => passport.hgt = Some(value),
-                "hcl" => passport.hcl = Some(value),
-                "ecl" => passport.ecl = Some(value),
-                "pid" => passport.pid = Some(value),
-                "cid" => passport.cid = Some(value),
-                unknown => return Err(ParseError { message: format!("unknown field: {}", unknown) })
-            }
-        }
-
-        Ok(passport)
-    }
+fn parse(input: &str) -> Vec<Passport> {
+    input.split("\n\n")
+        .map(|passport| RE_PASSPORT.captures_iter(passport.as_ref())
+            .map(|captures|
+                (
+                    captures.name("field").unwrap().as_str(),
+                    captures.name("value").unwrap().as_str()
+                )
+            )
+            .collect())
+        .collect()
 }
 
 pub fn solve() {
@@ -68,18 +44,21 @@ fn part_2(passports: &Vec<Passport>) -> usize {
 mod tests {
     // use super::part_1;
     // use super::part_2;
-    use super::Passport;
-    use std::str::FromStr;
+    use super::parse;
 
     #[test]
     fn test_parser() {
-        let data = "";
-        let passport = Passport::from_str(data);
-        print!("{:?}", passport)
+        let data = "ecl:gry pid:860033327\n\neyr:2020";
+        let passports = parse(&data);
+        assert_eq!(passports[0]["ecl"], "gry");
+        assert_eq!(passports[0]["pid"], "860033327");
+        assert_eq!(passports[1]["eyr"], "2020");
     }
 
     #[test]
-    fn test_part1() {}
+    fn test_part1() {
+        // let data = "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd\nbyr:1937 iyr:2017 cid:147 hgt:183cm\n\niyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884\nhcl:#cfa07d byr:1929\n\nhcl:#ae17e1 iyr:2013\neyr:2024\necl:brn pid:760753108 byr:1931\nhgt:179cm\n\nhcl:#cfa07d eyr:2025 pid:166559648\niyr:2011 ecl:brn hgt:59in";
+    }
 
     #[test]
     fn test_part2() {}

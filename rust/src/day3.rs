@@ -8,8 +8,8 @@ pub fn solve() {
         .filter(|line| !line.is_empty())
         .map(|line| line.to_string())
         .collect();
-    print!("Day 2 part 1: {}\n", part_1(&input));
-    print!("Day 2 part 2: {}\n", part_2(&input));
+    print!("Day 3 part 1: {}\n", part_1(&input));
+    print!("Day 3 part 2: {}\n", part_2(&input));
 }
 
 fn count_trees_on_route(map: &Vec<String>, dx: usize, dy: usize) -> u32 {

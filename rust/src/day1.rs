@@ -1,7 +1,13 @@
-use crate::utils;
+use std::fs::read_to_string;
 
 pub fn solve() {
-  let input = utils::get_input_ints(1);
+  let input = read_to_string("../inputs/1.txt")
+      .unwrap()
+      .lines()
+      .map(|l| l.trim())
+      .filter(|l| !l.is_empty())
+      .map(|l| l.parse().unwrap())
+      .collect();
   print!("Day 1 part 1: {}\n", part_1(&input));
   print!("Day 1 part 2: {}\n", part_2(&input));
 }

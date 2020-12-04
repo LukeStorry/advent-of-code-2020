@@ -2,7 +2,6 @@ use std::env;
 mod day1;
 mod day2;
 mod day3;
-mod utils;
 
 fn main() {
   let day = env::args().nth(1).unwrap_or("all".to_string());

@@ -1,9 +1,9 @@
-use crate::utils;
 use regex::Regex;
 use std::ops::RangeInclusive;
+use std::fs::read_to_string;
 
 pub fn solve() {
-  let input = utils::get_input_raw(2);
+  let input = read_to_string("../inputs/2.txt").unwrap();
   let rules = parse_input(&input);
   print!("Day 2 part 1: {}\n", part_1(&rules));
   print!("Day 2 part 2: {}\n", part_2(&rules));

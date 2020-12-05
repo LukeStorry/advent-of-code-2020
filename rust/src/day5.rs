@@ -1,25 +1,24 @@
 use std::fs::read_to_string;
+use std::collections::HashSet;
 
-fn seat_id(input: &str) -> i32 {
-    let (mut row_lower, mut row_upper, mut col_lower, mut col_upper) = (0, 127, 0, 7);
+fn seat_id(input: &str) -> u32 {
+    let (mut row_lower, mut row_upper, mut col_lower, mut col_upper): (f32, f32, f32, f32) = (0., 127., 0., 7.);
     for character in input.chars() {
         match character {
-            'F' => row_upper = ((row_upper - row_lower) as f32 / 2.).floor() as i32 + row_lower,
-            'B' => row_lower = ((row_upper - row_lower) as f32 / 2.).ceil() as i32 + row_lower,
-            'L' => col_upper = ((col_upper - col_lower) as f32 / 2.).floor() as i32 + col_lower,
-            'R' => col_lower = ((col_upper - col_lower) as f32 / 2.).ceil() as i32 + col_lower,
+            'F' => row_upper = ((row_upper - row_lower) / 2.).floor() + row_lower,
+            'B' => row_lower = ((row_upper - row_lower) / 2.).ceil() + row_lower,
+            'L' => col_upper = ((col_upper - col_lower) / 2.).floor() + col_lower,
+            'R' => col_lower = ((col_upper - col_lower) / 2.).ceil() + col_lower,
             un => panic!(format!("Unknown char in input: {}", un))
         }
     }
-    row_lower * 8 + col_lower
+    (row_lower * 8. + col_lower) as u32
 }
 
-fn get_seats() -> Vec<i32> {
+fn get_seats() -> HashSet<u32> {
     read_to_string("../inputs/5.txt")
         .unwrap()
         .lines()
-        .map(|l| l.trim())
-        .filter(|l| !l.is_empty())
         .map(|s| seat_id(s))
         .collect()
 }
@@ -30,17 +29,21 @@ pub fn solve() {
     print!("Day 5 part 2: {}\n", part_2(&seats));
 }
 
-fn part_1(seats: &Vec<i32>) -> i32 {
+fn part_1(seats: &HashSet<u32>) -> u32 {
     *seats.iter().max().unwrap()
 }
 
-fn part_2(seats: &Vec<i32>) -> i32 {
-    0
+fn part_2(seats: &HashSet<u32>) -> u32 {
+    let min = *seats.iter().min().unwrap();
+    let max = *seats.iter().max().unwrap();
+
+    let all_seats: HashSet<u32> = (min..max).collect();
+
+    *all_seats.difference(seats).next().unwrap()
 }
 
 #[cfg(test)]
 mod tests {
-    use std::fs::read_to_string;
     use super::*;
 
     #[test]
@@ -56,7 +59,6 @@ mod tests {
         let seats = get_seats();
         assert_eq!(part_1(&seats), 894);
     }
-
 
     #[test]
     fn test_part2() {

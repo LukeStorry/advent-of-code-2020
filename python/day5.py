@@ -16,4 +16,9 @@ def get_seat(boarding_pass:str)-> int:
 with open("../inputs/5.txt") as file:
     data = file.read().strip().splitlines()
 
-print(max(get_seat(x) for x in data))
+seats = [get_seat(x) for x in data]
+max_seat = max(seats)
+print(f"Part 1: {max_seat}")
+
+unused = set(range(min(seats) + 1, max_seat - 1)) - set(seats)
+print(f"Part 2: {unused}")

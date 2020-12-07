@@ -1,5 +1,3 @@
-import re
-
 with open("inputs/3.txt") as file:
     data = file.read()
 map = data.split("\n")

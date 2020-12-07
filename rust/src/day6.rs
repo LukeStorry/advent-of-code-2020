@@ -4,8 +4,8 @@ use std::collections::HashSet;
 
 pub fn solve() {
     let answers = read_to_string("../inputs/6.txt").unwrap();
-    print!("Day 5 part 1: {}\n", part_1(&answers));
-    print!("Day 5 part 2: {}\n", part_2(&answers));
+    print!("Day 6 part 1: {}\n", part_1(&answers));
+    print!("Day 6 part 2: {}\n", part_2(&answers));
 }
 
 fn part_1(answers: &str) -> usize {

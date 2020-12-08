@@ -11,6 +11,7 @@ mod day5;
 mod day6;
 mod day7;
 mod day8;
+mod day8_v2;
 
 fn main() {
     let day = env::args().nth(1).unwrap_or("all".to_string());
@@ -24,6 +25,7 @@ fn main() {
         "6" => day6::solve(),
         "7" => day7::solve(),
         "8" => day8::solve(),
+        "8v2" => day8_v2::solve(),
         "all" => {
             day1::solve();
             day2::solve();

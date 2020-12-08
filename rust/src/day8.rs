@@ -1,15 +1,11 @@
 use std::fs::read_to_string;
-use regex::Regex;
 
 type Program<'a> = Vec<(&'a str, i32)>;
 
 fn parse(input: &str) -> Program {
-    let re = Regex::new(r"(\w+) ([+-]\d+)").unwrap();
-    re.captures_iter(&input)
-        .map(|capture| (
-            capture.get(1).unwrap().as_str(),
-            capture.get(2).unwrap().as_str().parse().unwrap())
-        )
+    input.lines()
+        .map(|line| line.split_whitespace().collect::<Vec<_>>())
+        .map(|line| (line[0], line[1].parse().unwrap()))
         .collect()
 }
 

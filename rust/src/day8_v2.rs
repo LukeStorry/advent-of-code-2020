@@ -31,8 +31,8 @@ struct State {
     acc: i32,
     ptr: usize,
     visited_ptrs: Vec<bool>,
+    hit_inifinite_loop: bool,
     finished: bool,
-    halted: bool,
 }
 
 impl State {
@@ -44,8 +44,8 @@ impl State {
             acc: 0,
             ptr: 0,
             visited_ptrs: vec![false; len],
+            hit_inifinite_loop: false,
             finished: false,
-            halted: false,
         }
     }
 
@@ -62,13 +62,13 @@ impl State {
         };
 
         let finished = ptr > program.len() - 1;
-        let halted = visited_ptrs[ptr];
-        Self { program: self.program.clone(), acc, ptr, visited_ptrs, finished, halted }
+        let hit_inifinite_loop = !finished && visited_ptrs[ptr];
+        Self { program: self.program.clone(), acc, ptr, visited_ptrs, hit_inifinite_loop, finished }
     }
 
     fn run_until_completion(&self) -> State {
         let mut state = self.step();
-        while !state.halted & !state.finished {
+        while !state.hit_inifinite_loop && !state.finished {
             state = state.step();
         }
         state
@@ -93,19 +93,21 @@ fn part_1(program: &Program) -> i32 {
 }
 
 fn part_2(program: &Program) -> i32 {
-    // for p in program.iter()
-    //     .enumerate()
-    //     .filter_map(|(i, instruction )| discriminant(i) == Instruction::Nop())
-    //     .map(|(i, _)| {
-    //         let mut possibility = program.clone();
-    //         possibility[i].0 = if possibility[i].0 == "nop" { "jmp" } else { "nop" };
-    //         possibility
-    //     })
-    // {
-    //     let result = run(&p);
-    //     if result.0 { return result.1; }
-    // }
-    0
+    program.iter()
+        .enumerate()
+        .map(|(i, _)| {
+            let mut possibility = program.clone();
+            possibility[i] = match possibility[i] {
+                Instruction::Acc(a) => Instruction::Acc(a),
+                Instruction::Jmp(a) => Instruction::Nop(a),
+                Instruction::Nop(a) => Instruction::Jmp(a),
+            };
+            State::new(&possibility).run_until_completion()
+        })
+        .filter(|state| state.finished)
+        .nth(0)
+        .unwrap()
+        .acc
 }
 
 

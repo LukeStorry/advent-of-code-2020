@@ -33,12 +33,12 @@ fn part_1(numbers: &Vec<i32>, preamble_length: usize) -> i32 {
 
 fn part_2(numbers: &Vec<i32>, preamble_length: usize) -> i32 {
     let invalid_num = part_1(numbers, preamble_length);
-    for skip in 0..numbers.len() - 1 {
-        for take in 1..numbers.len() - skip {
-            let range = numbers.as_slice().iter().skip(skip).take(take);
-            let sum = range.clone().sum();
+    for left in 0..numbers.len() - 1 {
+        for right in (left+1)..numbers.len() {
+            let range = &numbers[left..right];
+            let sum = range.iter().sum();
             if invalid_num < sum { break; };
-            if invalid_num == sum { return range.clone().min().unwrap() + range.max().unwrap(); }
+            if invalid_num == sum { return range.iter().min().unwrap() + range.iter().max().unwrap(); }
         }
     }
     unreachable!("No Range found")

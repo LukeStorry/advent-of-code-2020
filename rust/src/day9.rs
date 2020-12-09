@@ -1,5 +1,4 @@
 use std::fs::read_to_string;
-use itertools::Itertools;
 
 fn get_input() -> Vec<i32> {
     read_to_string("../inputs/9.txt").unwrap()
@@ -15,21 +14,21 @@ pub fn solve() {
 }
 
 fn part_1(numbers: &Vec<i32>, preamble_length: usize) -> i32 {
-    *numbers
+    numbers
         .iter()
         .enumerate()
         .skip(preamble_length)
-        .find(|(i, &n)|
-            !numbers.iter()
-                .skip(i - preamble_length)
-                .take(preamble_length)
-                .permutations(2)
-                .map(|x| x[0] + x[1])
-                .collect::<Vec<_>>()
-                .contains(&n)
-        )
+        .find_map(|(num_index, &num)| {
+            for left in (num_index - preamble_length)..num_index {
+                for right in (left + 1)..num_index {
+                    if numbers[left] + numbers[right] == num {
+                        return None;
+                    }
+                }
+            }
+            Some(num)
+        })
         .unwrap()
-        .1
 }
 
 

@@ -6,13 +6,13 @@ with open("../inputs/10.txt") as file:
 numbers = [int(i) for i in data.splitlines()]
 
 outlet, device = 0, max(numbers) + 3
-chain = [outlet] + sorted(numbers) + [device]
-diffs = [a - b for a, b in zip(chain[1:], chain)]
+joltages = [outlet] + sorted(numbers) + [device]
+diffs = [a - b for a, b in zip(joltages[1:], joltages)]
 print(f"Day 10 Part 1: {diffs.count(1) * diffs.count(3)}")
 
 results = [0 for _ in range(device + 1)]
 results[0] = 1
-for adapter in chain:
-    results[adapter] += results[adapter - 1] + results[adapter - 2] + results[adapter - 3]
+for joltage in joltages:
+    results[joltage] += results[joltage - 1] + results[joltage - 2] + results[joltage - 3]
 
 print(f"Day 10 Part 2: {results[-1]}")

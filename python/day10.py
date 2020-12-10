@@ -5,7 +5,6 @@ with open("../inputs/10.txt") as file:
 
 numbers = [int(i) for i in data.splitlines()]
 
-# Part 1
 outlet, device = 0, max(numbers) + 3
 chain = [outlet] + sorted(numbers) + [device]
 diffs = [a - b for a, b in zip(chain[1:], chain)]
@@ -13,9 +12,7 @@ print(f"Day 10 Part 1: {diffs.count(1) * diffs.count(3)}")
 
 results = [0 for _ in range(device + 1)]
 results[0] = 1
-current_value = outlet
 for adapter in chain:
-    ways_to_plug_in = results[adapter - 1] + results[adapter - 2] + results[adapter - 3]
-    results[adapter] += ways_to_plug_in
+    results[adapter] += results[adapter - 1] + results[adapter - 2] + results[adapter - 3]
 
 print(f"Day 10 Part 2: {results[-1]}")

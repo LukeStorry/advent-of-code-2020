@@ -37,14 +37,14 @@ fn part_2(joltages: &Vec<i32>) -> usize {
     let len = (*joltages.iter().max().unwrap() + 1) as usize;
     let mut count_paths = vec!(0; len);
     count_paths[0] = 1;
-    for &joltage in joltages.iter() {
-        for &possibility in [joltage - 1, joltage - 2, joltage - 3].iter() {
+    for &joltage in joltages {
+        for possibility in joltage - 3..joltage {
             if possibility >= 0 {
                 count_paths[joltage as usize] += count_paths[possibility as usize];
             }
         }
     }
-    *count_paths.iter().last().unwrap()
+    count_paths[len -1]
 }
 
 

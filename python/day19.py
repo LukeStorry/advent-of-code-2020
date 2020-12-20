@@ -25,8 +25,22 @@ def generate_valid_messages(rule: str) -> set:
 all_valid_messages = generate_valid_messages(rules['0'])
 print(sum(message in all_valid_messages for message in messages))
 
-rules['8'] = "42 | 42 8"
-rules['11'] = "42 31 | 42 11 31"
+# part 2
+valid_messages_for_31 = generate_valid_messages(rules['31'])
+valid_messages_for_42 = generate_valid_messages(rules['42'])
 
-all_valid_messages = generate_valid_messages(rules['0'])
-print(sum(message in all_valid_messages for message in messages))
+# print(len(valid_messages_for_31))
+# print(len(valid_messages_for_42))
+# print(set(len(x) for x in valid_messages_for_31))
+# print(set(len(x) for x in valid_messages_for_42))
+# >> all valid messages in there are 8 chars long
+
+count = 0
+for message in messages:
+    sections = [message[i:i + 8] for i in range(0, len(message), 8)]
+    check_string = ''.join(str(section in valid_messages_for_42)[0] for section in sections)
+
+    if check_string.count('T') > check_string.count('F') and 'TF' in check_string and 'FT' not in check_string:
+        count += 1
+
+print(count)
